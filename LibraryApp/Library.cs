@@ -14,11 +14,16 @@ namespace LibraryApp
         // name nem lehet null vagy üres
         public Library(string name)
         {
-            if(string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentException("Name cannot be null or empty.", nameof(name));
+            }
             else
             {
                 _name = name;
+                _availableBooks = new List<string>();
+                _borrowedBooks = new List<string>();
+
             }
         }
 
@@ -41,7 +46,10 @@ namespace LibraryApp
             }
             else
             {
-                _availableBooks.Add(title);
+               for (int i = 0; i < copies; i++)
+                {
+                    _availableBooks.Add(title);
+                }
             }
         }
 
@@ -104,19 +112,29 @@ namespace LibraryApp
         // Az összes egyedi cím száma (elérhető és kikölcsönzött együtt)
         public int GetTotalTitles()
         {
-            throw new NotImplementedException();
+            return _availableBooks.Distinct().Count() + _borrowedBooks.Distinct().Count();
         }
 
         // Az összes jelenleg kikölcsönzött példány száma
         public int GetTotalBorrowed()
         {
-            throw new NotImplementedException();
+            return _borrowedBooks.Count();
         }
 
         // Eltávolít minden példányt — visszatér false ha a cím nem létezik
         public bool RemoveBook(string title)
         {
-            throw new NotImplementedException();
+            if (_availableBooks.Contains(title))
+            {
+                _availableBooks.RemoveAll(y => y == title);
+                return true;
+            }
+            else
+            {
+
+                return false;
+            }
+                
         }
     }
 }
