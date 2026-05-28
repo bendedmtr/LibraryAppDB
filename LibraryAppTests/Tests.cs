@@ -61,7 +61,7 @@ namespace LibraryAppTests
         [TestMethod]
         public void BorrowBook_AvailableCopy()
         {
-            var lib = CreateDefaultLibrary(); // Dune: 3 példány
+            var lib = CreateDefaultLibrary();
             bool result = lib.BorrowBook("Dune");
             Assert.IsTrue(result);
             Assert.AreEqual(2, lib.GetAvailableCopies("Dune"));
@@ -87,15 +87,27 @@ namespace LibraryAppTests
         [TestMethod]
         public void ReturnBook_BorrowedCopy()
         {
-            var lib = CreateDefaultLibrary();
-            lib.BorrowBook("1984");
-            bool result = lib.ReturnBook("1984");
+            var libr = CreateDefaultLibrary();
+            libr.BorrowBook("1984");
+            bool result = libr.ReturnBook("1984");
             Assert.IsTrue(result);
-            Assert.AreEqual(1, lib.GetAvailableCopies("1984"));
+            Assert.AreEqual(1, libr.GetAvailableCopies("1984"));
         }
         // TODO: nem létező cím visszahozásakor false-t kell visszaadni
+        [TestMethod]
+        public void ReturnBook_NonExistingTitle()
+        {
+            var libr = CreateDefaultLibrary();
+            Assert.IsFalse(libr.ReturnBook("Nemlétez Ödön"));
+        }
 
         // TODO: olyan könyv visszahozásakor, amelyből semmi sincs kikölcsönzve, false-t kell adni
+        [TestMethod]
+        public void ReturnBook_NotBorrowed()
+        {
+            var libr = CreateDefaultLibrary();
+            Assert.IsFalse(libr.ReturnBook("Dune"));
+        }
 
         // ---- GetAvailableCopies ----
 
