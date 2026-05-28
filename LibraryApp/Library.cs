@@ -14,43 +14,91 @@ namespace LibraryApp
         // name nem lehet null vagy üres
         public Library(string name)
         {
-            throw new NotImplementedException();
+            if(string.IsNullOrEmpty(name))
+                throw new ArgumentException("Name cannot be null or empty.", nameof(name));
+            else
+            {
+                _name = name;
+            }
         }
 
         public string GetName()
         {
-            throw new NotImplementedException();
+            return _name;
         }
 
         // Minden példány egy külön bejegyzés — AddBook("Dune", 3) -> három "Dune" kerül a listába
         // copies >= 1
         public void AddBook(string title, int copies)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(title))
+            {
+                throw new ArgumentException("Title cannot be null or empty.", nameof(title));
+            }
+            else if (copies < 1)
+            {
+                throw new ArgumentException("Copies must be at least 1.", nameof(copies));
+            }
+            else
+            {
+                _availableBooks.Add(title);
+            }
         }
 
         // Visszatér false-al ha nincs elérhető példány a megadott címből
         public bool BorrowBook(string title)
         {
-            throw new NotImplementedException();
+            if (_availableBooks.Contains(title))
+            {
+                _availableBooks.Remove(title);
+                _borrowedBooks.Add(title);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // Visszatér false-al ha nincs kikölcsönzött példány a megadott címből
         public bool ReturnBook(string title)
         {
-            throw new NotImplementedException();
+            if (_borrowedBooks.Contains(title))
+            {
+                _borrowedBooks.Remove(title);
+                _availableBooks.Add(title);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // Az _availableBooks listában szereplő példányok számát adja vissza — -1 ha a cím nem szerepel
         public int GetAvailableCopies(string title)
         {
-            throw new NotImplementedException();
+            if (_availableBooks.Contains(title))
+            {
+                return _availableBooks.Count(y => y == title);
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         // Visszatér true-val ha legalább egy szabad példány elérhető
         public bool IsAvailable(string title)
         {
-            throw new NotImplementedException();
+            if (_availableBooks.Contains(title))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // Az összes egyedi cím száma (elérhető és kikölcsönzött együtt)
