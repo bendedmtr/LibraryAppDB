@@ -136,7 +136,20 @@ namespace LibraryAppTests
             Assert.IsTrue(lib.IsAvailable("Dune"));
         }
         // TODO: teljesen kikölcsönzött könyv esetén false-t kell visszaadni
+        [TestMethod]
+        public void IsAvailable_CompletelyEmpty()
+        {
+            var lib = CreateDefaultLibrary(); //1 van belole
+            lib.BorrowBook("1984");
+            Assert.IsFalse(lib.IsAvailable("1984"));
+        }
         // TODO: nem létező cím esetén false-t kell visszaadni
+        [TestMethod]
+        public void IsAvailable_NonexistingTitle()
+        {
+            var lib = CreateDefaultLibrary();
+            Assert.IsFalse(lib.IsAvailable("nemletzoooo"));
+        }
 
         // ---- GetTotalBorrowed ----
 
@@ -149,7 +162,22 @@ namespace LibraryAppTests
             Assert.AreEqual(2, lib.GetTotalBorrowed());
         }
         // TODO: újonnan létrehozott, üres könyvtárban GetTotalBorrowed() nullát ad vissza
+        [TestMethod]
+        public void GetTotalBorrowed_EmptyLibrary()
+        {
+            var lib = new Library("Empty Library");
+            Assert.AreEqual(0, lib.GetTotalBorrowed());
+        }
         // TODO: visszahozás után a kikölcsönzött darabszám helyesen csökken
+        [TestMethod]
+        public void GetTotalBorrowed_AfterReturn()
+        {
+            var lib = CreateDefaultLibrary();
+            lib.BorrowBook("Dune"); //1 kiberelt
+            lib.BorrowBook("1984"); //2 -""-
+            lib.ReturnBook("Dune"); //1 -""-
+            Assert.AreEqual(1, lib.GetTotalBorrowed());
+        }
 
         // ---- RemoveBook ----
 
@@ -162,6 +190,19 @@ namespace LibraryAppTests
             Assert.AreEqual(1, lib.GetTotalTitles());
         }
         // TODO: nem létező cím eltávolításakor false-t kell visszaadni
+        [TestMethod]
+        public void RemoveBook_NonExistingTitle()
+        {
+            var lib = CreateDefaultLibrary();
+            Assert.IsFalse(lib.RemoveBook("nemletzoooo"));
+        }
         // TODO: eltávolítás után a cím már nem érhető el, GetAvailableCopies -1-et ad vissza
+        [TestMethod]
+        public void RemoveBook_AfterRemoval()
+        {
+            var lib = CreateDefaultLibrary();
+            lib.RemoveBook("Dune");
+            Assert.AreEqual(-1, lib.GetAvailableCopies("Dune"));
+        }
     }
 }
