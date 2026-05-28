@@ -120,6 +120,12 @@ namespace LibraryAppTests
             Assert.AreEqual(1, lib.GetAvailableCopies("Dune"));
         }
         // TODO: nem létező cím esetén -1-et kell visszaadni
+        [TestMethod]
+        public void GetAvailableCopies_NonExistingTitle()
+        {
+            var lib = CreateDefaultLibrary();
+            Assert.AreEqual(-1, lib.GetAvailableCopies("nemletzoooo"));
+        }
 
         // ---- IsAvailable ----
 
